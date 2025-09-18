@@ -20,5 +20,5 @@ public class Details {
     @Column (nullable = false, length = 100, unique = true)
     private String email;
 
-    private String Name;
+    private String name;
 }
