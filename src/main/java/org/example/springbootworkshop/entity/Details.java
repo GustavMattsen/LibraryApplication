@@ -1,12 +1,10 @@
 package org.example.springbootworkshop.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
+@Data
 @Getter
 @Setter
 @NoArgsConstructor
