@@ -7,8 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 public class AppUserRepositoryTest {
@@ -40,5 +44,24 @@ public class AppUserRepositoryTest {
         assertThat(savedAppUser.getId()).isNotNull();
         assertThat(savedAppUser.getUsername()).isEqualTo("sture123");
         assertThat(savedAppUser.getDetails().getEmail()).isEqualTo("sture@example.com");
+    }
+
+    @Test
+    public void testSaveUserWithDetailsAndFindByUsername() {
+        Details details = new Details();
+        details.setEmail("sven@svensson.com");
+        details.setName("Sven Svensson");
+        detailsRepository.save(details);
+
+        AppUser user = new AppUser();
+        user.setUsername("Sven123");
+        user.setRegistrationDate(LocalDate.from(LocalDateTime.now()));
+        user.setDetails(details);
+        appUserRepository.save(user);
+
+        Optional<AppUser> found = appUserRepository.findByUsername("Sven123");
+        assertTrue(found.isPresent());
+        assertEquals("Sven123", found.get().getUsername());
+        assertEquals("sven@svensson.com", found.get().getDetails().getEmail());
     }
 }
