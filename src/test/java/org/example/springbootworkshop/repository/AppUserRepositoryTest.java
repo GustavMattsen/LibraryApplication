@@ -23,28 +23,6 @@ public class AppUserRepositoryTest {
     @Autowired
     private DetailsRepository detailsRepository;
 
-    @Test
-    void testSaveAppUser() {
-        //Create and save Details first
-        Details details = new Details();
-        details.setEmail("sture@example.com");
-        details.setName("Sture");
-        Details savedDetails = detailsRepository.save(details);
-
-        //Create AppUser and link to the saved details
-        AppUser appUser = new AppUser();
-        appUser.setUsername("sture123");
-        appUser.setRegistrationDate(LocalDate.now());
-        appUser.setDetails(savedDetails);
-
-        //Save AppUser
-        AppUser savedAppUser = appUserRepository.save(appUser);
-
-        //Assertions to verify save worked
-        assertThat(savedAppUser.getId()).isNotNull();
-        assertThat(savedAppUser.getUsername()).isEqualTo("sture123");
-        assertThat(savedAppUser.getDetails().getEmail()).isEqualTo("sture@example.com");
-    }
 
     @Test
     public void testSaveUserWithDetailsAndFindByUsername() {
@@ -63,5 +41,38 @@ public class AppUserRepositoryTest {
         assertTrue(found.isPresent());
         assertEquals("Sven123", found.get().getUsername());
         assertEquals("sven@svensson.com", found.get().getDetails().getEmail());
+    }
+
+    @Test
+    public void testFindByDetailsId() {
+        Details details = new Details();
+        details.setEmail("idtest@example.com");
+        details.setName("ID Test");
+        detailsRepository.save(details);
+
+        AppUser user = new AppUser();
+        user.setUsername("idUser");
+        user.setRegistrationDate(LocalDate.now());
+        user.setDetails(details);
+        appUserRepository.save(user);
+
+        Long detailsId = details.getId();
+        Optional<AppUser> found = appUserRepository.findByDetails_Id(detailsId);
+        assertTrue(found.isPresent());
+        assertEquals("idUser", found.get().getUsername());
+    }
+
+    @Test
+    void testFindByDetailsEmailIgnoreCase() {
+        Details details = new Details(null, "example@example.com", "Case Test");
+        Details savedDetails = detailsRepository.save(details);
+
+        AppUser user = new AppUser(null, "testUser", LocalDate.now(), savedDetails);
+        appUserRepository.save(user);
+
+            Optional<AppUser> found = appUserRepository.findByDetails_EmailIgnoreCase("EXAMPLE@EXAMPLE.COM");
+
+        assertThat(found).isPresent();
+        assertThat(found.get().getUsername()).isEqualTo("testUser");
     }
 }

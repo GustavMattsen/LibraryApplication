@@ -13,7 +13,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     List<AppUser> findByRegistrationDateBetween(LocalDate startDate, LocalDate endDate);
 
-    Optional<AppUser> findByDetailsId(Long detailsId);
+    Optional<AppUser> findByDetails_Id(Long detailsId);
 
-    Optional<AppUser> findByDetailsEmailIgnoreCase(String email);
+    Optional<AppUser> findByDetails_EmailIgnoreCase(String email);
 }
