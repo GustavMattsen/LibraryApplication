@@ -20,5 +20,13 @@ public class Book {
     private String title;
 
     private int maxLoanDays;
+
+    @ManyToMany
+    @JoinTable(
+            name = "book_author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private java.util.Set<Author> authors = new java.util.HashSet<>();
 }
 
