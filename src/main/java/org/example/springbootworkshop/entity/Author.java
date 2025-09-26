@@ -21,4 +21,11 @@ public class Author {
 
     @ManyToMany(mappedBy = "authors")
     private java.util.Set<Book> books = new java.util.HashSet<>();
+
+    // convenience constructor for tests
+    public Author(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 }
+
