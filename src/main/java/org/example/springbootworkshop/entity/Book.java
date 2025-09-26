@@ -7,6 +7,7 @@ import lombok.*;
 @Data                   // generates getters, setters, toString, equals, hashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Book {
 
     @Id
@@ -28,5 +29,24 @@ public class Book {
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
     private java.util.Set<Author> authors = new java.util.HashSet<>();
+
+    public void addAuthor(Author author) {
+        authors.add(author);
+        author.getBooks().add(this);
+    }
+
+    public void removeAuthor(Author author) {
+        authors.remove(author);
+        author.getBooks().remove(this);
+    }
+
+    // Convenience constructor
+    public Book(String isbn, String title, int maxLoanDays) {
+        this.isbn = isbn;
+        this.title = title;
+        this.maxLoanDays = maxLoanDays;
+    }
+
+
 }
 
