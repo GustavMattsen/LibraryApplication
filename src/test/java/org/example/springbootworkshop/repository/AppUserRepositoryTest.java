@@ -67,7 +67,7 @@ public class AppUserRepositoryTest {
         Details details = new Details(null, "example@example.com", "Case Test");
         Details savedDetails = detailsRepository.save(details);
 
-        AppUser user = new AppUser(null, "testUser", LocalDate.now(), savedDetails);
+        AppUser user = new AppUser("testUser", LocalDate.now(), savedDetails);
         appUserRepository.save(user);
 
             Optional<AppUser> found = appUserRepository.findByDetails_EmailIgnoreCase("EXAMPLE@EXAMPLE.COM");
@@ -81,7 +81,7 @@ public class AppUserRepositoryTest {
         Details details = new Details(null, "test@example.com", "Range Test");
         detailsRepository.save(details);
 
-        AppUser user = new AppUser(null, "rangeUser", LocalDate.of(2024, 1, 15), details);
+        AppUser user = new AppUser("rangeUser", LocalDate.of(2024, 1, 15), details);
         appUserRepository.save(user);
 
         LocalDate start = LocalDate.of(2024, 1, 1);
